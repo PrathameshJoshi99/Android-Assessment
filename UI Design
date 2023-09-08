@@ -1,0 +1,94 @@
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.material3.icons.Icons
+import androidx.compose.material3.icons.filled.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
+
+@Composable
+fun MusicAppUI() {
+    var searchText by remember { mutableStateOf("") }
+    
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        // Header
+        TopAppBar(
+            title = { /* Your app title */ },
+            actions = {
+                // Search icon, profile icon, etc.
+            }
+        )
+        
+        // Search Bar
+        BasicTextField(
+            value = searchText,
+            onValueChange = { searchText = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = { /* Handle search here */ }
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+        
+        // Song List
+        LazyColumn {
+            items(/* List of songs */) { song ->
+                SongListItem(song = song)
+            }
+        }
+    }
+}
+
+@Composable
+fun SongListItem(song: Song) {
+    // Add animations and transitions for song list items here
+    // You can also use 'Modifier.offset' with 'Animatable' for custom animations
+}
+
+@Composable
+fun AnimatedBackgroundImage(url: String) {
+    val painter = rememberImagePainter(data = url)
+
+    // Define gradient background based on the song's cover image
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        Color.Transparent,
+                        Color.Black
+                    )
+                )
+            )
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
