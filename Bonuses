@@ -1,0 +1,114 @@
+Adding morph animations, horizontal swipe for tab navigation, and haptic feedback to your music app can greatly enhance the user experience. Below, I'll provide code snippets and explanations for each of these bonus features:
+
+1. Morph Animations:
+
+@Composable
+fun MorphAnimationDemo() {
+    var isShowingView1 by remember { mutableStateOf(true) }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        if (isShowingView1) {
+            View1()
+        } else {
+            View2()
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            isShowingView1 = !isShowingView1
+        }) {
+            Text(text = if (isShowingView1) "Show View 2" else "Show View 1")
+        }
+    }
+}
+
+@Composable
+fun View1() {
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .height(200.dp)
+            .animateContentSize() // Enables the morph animation
+    ) {
+        Text(text = "View 1")
+    }
+}
+
+@Composable
+fun View2() {
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .height(400.dp)
+            .animateContentSize() // Enables the morph animation
+    ) {
+        Text(text = "View 2")
+    }
+}
+
+2. Horizontal Swipe for Tab Navigation:
+
+@Composable
+fun TabViewWithSwipe() {
+    val pagerState = rememberPagerState()
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                )
+            }
+        ) {
+            // Define your tabs here
+            Tab(
+                selected = pagerState.currentPage == 0,
+                onClick = { pagerState.animateScrollToPage(0) },
+                text = { Text("For You") }
+            )
+            Tab(
+                selected = pagerState.currentPage == 1,
+                onClick = { pagerState.animateScrollToPage(1) },
+                text = { Text("Top Tracks") }
+            )
+        }
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            // Content for each tab page
+            if (page == 0) {
+                // Display "For You" content
+            } else {
+                // Display "Top Tracks" content
+            }
+        }
+    }
+}
+
+3. Haptic Feedback:
+
+@Composable
+fun HapticFeedbackButton() {
+    val context = LocalContext.current
+
+    Button(
+        onClick = {
+            performHapticFeedback(context, HapticFeedbackType.Click)
+            // Add your action here
+        }
+    ) {
+        Text("Click Me")
+    }
+}
